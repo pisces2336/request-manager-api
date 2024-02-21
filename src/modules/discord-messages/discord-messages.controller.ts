@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { DiscordMessagesService } from './discord-messages.service';
 import { CreateDiscordMessageDto } from './dto/create-discord-message.dto';
@@ -31,8 +33,13 @@ export class DiscordMessagesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.discordMessagesService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<DiscordMessage> {
+    return await this.discordMessagesService.findOne(+id).catch((e) => {
+      throw new HttpException(
+        `#${id} discordMessage is not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    });
   }
 
   @Patch(':id')

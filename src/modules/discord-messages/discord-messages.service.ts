@@ -25,8 +25,8 @@ export class DiscordMessagesService {
     return await this.discordMessagesRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} discordMessage`;
+  async findOne(id: number): Promise<DiscordMessage> {
+    return await this.discordMessagesRepository.findOneByOrFail({ id });
   }
 
   update(id: number, updateDiscordMessageDto: UpdateDiscordMessageDto) {
