@@ -17,6 +17,6 @@ export const typeOrmModuleOptions: TypeOrmModuleOptions = {
 export const dataSource = new DataSource(
   Object.assign(typeOrmModuleOptions as DataSourceOptions, {
     entities: ['src/**/entities/*.entity.ts'],
-    migrations: ['src/migrations/*.ts'],
+    migrations: ['src/db/migrations/*.ts'],
   }),
 );

@@ -10,6 +10,7 @@ import {
 import { DiscordMessagesService } from './discord-messages.service';
 import { CreateDiscordMessageDto } from './dto/create-discord-message.dto';
 import { UpdateDiscordMessageDto } from './dto/update-discord-message.dto';
+import { DiscordMessage } from './entities/discord-message.entity';
 
 @Controller('discord-messages')
 export class DiscordMessagesController {
@@ -18,7 +19,9 @@ export class DiscordMessagesController {
   ) {}
 
   @Post()
-  create(@Body() createDiscordMessageDto: CreateDiscordMessageDto) {
+  async create(
+    @Body() createDiscordMessageDto: CreateDiscordMessageDto,
+  ): Promise<DiscordMessage> {
     return this.discordMessagesService.create(createDiscordMessageDto);
   }
 

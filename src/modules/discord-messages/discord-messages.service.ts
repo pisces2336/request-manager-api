@@ -1,11 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDiscordMessageDto } from './dto/create-discord-message.dto';
 import { UpdateDiscordMessageDto } from './dto/update-discord-message.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DiscordMessage } from './entities/discord-message.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class DiscordMessagesService {
-  create(createDiscordMessageDto: CreateDiscordMessageDto) {
-    return 'This action adds a new discordMessage';
+  constructor(
+    @InjectRepository(DiscordMessage)
+    private discordMessagesRepository: Repository<DiscordMessage>,
+  ) {}
+
+  async create(
+    createDiscordMessageDto: CreateDiscordMessageDto,
+  ): Promise<DiscordMessage> {
+    const discordMessage = this.discordMessagesRepository.create(
+      createDiscordMessageDto,
+    );
+    return await this.discordMessagesRepository.save(discordMessage);
   }
 
   findAll() {
