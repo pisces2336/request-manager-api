@@ -34,7 +34,7 @@ export class DiscordMessagesController {
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<DiscordMessage> {
-    return await this.discordMessagesService.findOne(+id).catch((e) => {
+    return await this.discordMessagesService.findOne(+id).catch(() => {
       throw new HttpException(
         `#${id} discordMessage is not found`,
         HttpStatus.NOT_FOUND,
@@ -49,7 +49,7 @@ export class DiscordMessagesController {
   ): Promise<DiscordMessage> {
     return await this.discordMessagesService
       .update(+id, updateDiscordMessageDto)
-      .catch((e) => {
+      .catch(() => {
         throw new HttpException(
           `#${id} discordMessage is not found`,
           HttpStatus.NOT_FOUND,
@@ -58,8 +58,8 @@ export class DiscordMessagesController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return await this.discordMessagesService.remove(+id).catch((e) => {
+  async remove(@Param('id') id: string): Promise<void> {
+    return await this.discordMessagesService.remove(+id).catch(() => {
       throw new HttpException(
         `#${id} discordMessage is not found`,
         HttpStatus.NOT_FOUND,

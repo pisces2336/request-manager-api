@@ -21,7 +21,7 @@ export class DiscordMessagesService {
     return await this.discordMessagesRepository.save(discordMessage);
   }
 
-  async findAll() {
+  async findAll(): Promise<DiscordMessage[]> {
     return await this.discordMessagesRepository.find();
   }
 
