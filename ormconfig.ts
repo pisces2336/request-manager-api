@@ -1,5 +1,5 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import 'dotenv/config';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const typeOrmModuleOptions: TypeOrmModuleOptions = {
@@ -12,10 +12,11 @@ export const typeOrmModuleOptions: TypeOrmModuleOptions = {
     rejectUnauthorized: true,
   },
   synchronize: false,
-  entities: ['dist/src/**/entities/*.entity.js'],
-  migrations: ['dist/src/migrations/*.js'],
 };
 
 export const dataSource = new DataSource(
-  typeOrmModuleOptions as DataSourceOptions,
+  Object.assign(typeOrmModuleOptions as DataSourceOptions, {
+    entities: ['src/**/entities/*.entity.ts'],
+    migrations: ['src/migrations/*.ts'],
+  }),
 );
