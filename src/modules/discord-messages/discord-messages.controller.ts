@@ -43,11 +43,18 @@ export class DiscordMessagesController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateDiscordMessageDto: UpdateDiscordMessageDto,
-  ) {
-    return this.discordMessagesService.update(+id, updateDiscordMessageDto);
+  ): Promise<DiscordMessage> {
+    return await this.discordMessagesService
+      .update(+id, updateDiscordMessageDto)
+      .catch((e) => {
+        throw new HttpException(
+          `#${id} discordMessage is not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      });
   }
 
   @Delete(':id')

@@ -29,8 +29,16 @@ export class DiscordMessagesService {
     return await this.discordMessagesRepository.findOneByOrFail({ id });
   }
 
-  update(id: number, updateDiscordMessageDto: UpdateDiscordMessageDto) {
-    return `This action updates a #${id} discordMessage`;
+  async update(
+    id: number,
+    updateDiscordMessageDto: UpdateDiscordMessageDto,
+  ): Promise<DiscordMessage> {
+    const discordMessage = await this.discordMessagesRepository.findOneByOrFail(
+      { id },
+    );
+    return await this.discordMessagesRepository.save(
+      Object.assign(discordMessage, updateDiscordMessageDto),
+    );
   }
 
   remove(id: number) {

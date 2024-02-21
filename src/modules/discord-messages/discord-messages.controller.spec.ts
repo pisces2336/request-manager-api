@@ -8,6 +8,7 @@ import * as request from 'supertest';
 import { CreateDiscordMessageDto } from './dto/create-discord-message.dto';
 import { DiscordMessage } from './entities/discord-message.entity';
 import { DiscordMessagesService } from './discord-messages.service';
+import { UpdateDiscordMessageDto } from './dto/update-discord-message.dto';
 
 describe('DiscordMessagesController', () => {
   let module: TestingModule;
@@ -92,6 +93,49 @@ describe('DiscordMessagesController', () => {
       it('取得に失敗(存在しないid)', async () => {
         await request(app.getHttpServer())
           .get('/discord-messages/-1')
+          .expect(HttpStatus.NOT_FOUND);
+      });
+    });
+  });
+
+  describe('update', () => {
+    describe('正常系', () => {
+      it('更新に成功', async () => {
+        // 準備
+        const createDiscordMessageDto: CreateDiscordMessageDto = {
+          messageId: `test-${new Date().toISOString()}`,
+          isActive: true,
+        };
+        const createdDiscordMessage = await service.create(
+          createDiscordMessageDto,
+        );
+
+        // 更新
+        const updatedDiscordMessage: DiscordMessage = Object.assign(
+          createdDiscordMessage,
+          {
+            messageId: `test-${new Date().toISOString()}`,
+            isActive: false,
+          },
+        );
+        const result = await request(app.getHttpServer())
+          .patch(`/discord-messages/${createdDiscordMessage.id}`)
+          .send(updatedDiscordMessage)
+          .expect(HttpStatus.OK);
+        expect(result.body).toEqual(updatedDiscordMessage);
+      });
+    });
+
+    describe('異常系', () => {
+      it('存在しないid', async () => {
+        const updateDiscordMessageDto: UpdateDiscordMessageDto = {
+          id: -1,
+          messageId: `test-${new Date().toISOString()}`,
+          isActive: true,
+        };
+        await request(app.getHttpServer())
+          .patch('/discord-messages/-1')
+          .send(updateDiscordMessageDto)
           .expect(HttpStatus.NOT_FOUND);
       });
     });

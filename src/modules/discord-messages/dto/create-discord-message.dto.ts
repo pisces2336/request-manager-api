@@ -1,1 +1,4 @@
-export class CreateDiscordMessageDto {}
+export class CreateDiscordMessageDto {
+  messageId: string;
+  isActive: boolean;
+}
