@@ -26,8 +26,8 @@ export class DiscordMessagesController {
   }
 
   @Get()
-  findAll() {
-    return this.discordMessagesService.findAll();
+  async findAll(): Promise<DiscordMessage[]> {
+    return await this.discordMessagesService.findAll();
   }
 
   @Get(':id')

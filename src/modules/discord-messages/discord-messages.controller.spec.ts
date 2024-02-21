@@ -6,6 +6,7 @@ import { typeOrmModuleOptions } from 'src/db/config/ormconfig';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { CreateDiscordMessageDto } from './dto/create-discord-message.dto';
+import { DiscordMessage } from './entities/discord-message.entity';
 
 describe('DiscordMessagesController', () => {
   let module: TestingModule;
@@ -51,6 +52,17 @@ describe('DiscordMessagesController', () => {
         expect(response.body).toEqual(
           Object.assign(dto, { id: expect.any(Number) }),
         );
+      });
+    });
+  });
+
+  describe('findAll', () => {
+    describe('正常系', () => {
+      it('取得に成功', async () => {
+        const response = await request(app.getHttpServer())
+          .get('/discord-messages')
+          .expect(HttpStatus.OK);
+        expect(response.body).toEqual(expect.any(Array<DiscordMessage>));
       });
     });
   });
