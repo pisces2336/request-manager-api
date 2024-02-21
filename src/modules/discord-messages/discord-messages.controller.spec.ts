@@ -140,4 +140,31 @@ describe('DiscordMessagesController', () => {
       });
     });
   });
+
+  describe('remove', () => {
+    describe('正常系', () => {
+      it('削除に成功', async () => {
+        // 準備
+        const createDiscordMessageDto: CreateDiscordMessageDto = {
+          messageId: `test-${new Date().toISOString()}`,
+          isActive: true,
+        };
+        const createdDiscordMessage = await service.create(
+          createDiscordMessageDto,
+        );
+
+        // 削除
+        await request(app.getHttpServer())
+          .delete(`/discord-messages/${createdDiscordMessage.id}`)
+          .expect(HttpStatus.OK);
+      });
+    });
+    describe('異常系', () => {
+      it('存在しないid', async () => {
+        await request(app.getHttpServer())
+          .delete('/discord-messages/-1')
+          .expect(HttpStatus.NOT_FOUND);
+      });
+    });
+  });
 });

@@ -58,7 +58,12 @@ export class DiscordMessagesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.discordMessagesService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.discordMessagesService.remove(+id).catch((e) => {
+      throw new HttpException(
+        `#${id} discordMessage is not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    });
   }
 }

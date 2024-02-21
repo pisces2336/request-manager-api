@@ -41,7 +41,8 @@ export class DiscordMessagesService {
     );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} discordMessage`;
+  async remove(id: number): Promise<void> {
+    await this.discordMessagesRepository.findOneByOrFail({ id });
+    await this.discordMessagesRepository.delete(id);
   }
 }
